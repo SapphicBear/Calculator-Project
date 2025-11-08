@@ -1,0 +1,69 @@
+/* Universals */
+* {
+    font-family: monospace, sans-serif;
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+.calculator {
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+    height: 460px;
+    background-color: grey;
+    border-radius: 12px;
+    box-shadow: rgb(43, 26, 37) 10px 10px 4px;
+    padding:20px;
+    gap: 20px;
+}
+
+.display {
+    background-color: rgb(187, 191, 192);
+    width:310px;
+    height:60px;
+    box-shadow: 0px 0px 5px 3px rgb(81, 80, 80);
+    padding:5px;
+}
+
+.button-area {
+    display:flex;
+    flex:0 0 1;
+    width:305px;
+    gap: 10px;
+}
+
+.operators {
+    display:flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+}
+
+.operators > * {
+    background-color: darkorange;
+    width: 50px;
+    padding:10px;
+    font-weight: 700;
+    font-size:22px;
+}
+.numbers {
+    display:flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-around;
+}
+
+.numbers > * {
+    background-color: orange;
+    flex:1 0 1;
+    height:75px;
+    width:75px;
+    align-content: center;
+    text-align: center;
+    font-weight: 700;
+    font-size:28px;
+}
+.zero {
+    order: 9;
+}
