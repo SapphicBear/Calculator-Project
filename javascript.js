@@ -1,27 +1,56 @@
 // Dom mod area
-const div = document.createElement("div");
 const display = document.querySelector(".display");
 const buttonArea = document.querySelector(".button-area");
 const output = document.querySelector(".output");
-const divOperators = document.querySelector(".operators");
-const divNumbers = document.querySelector(".numbers");
+const divOperator = document.querySelector(".operators");
+const divNumber = document.querySelector(".numbers");
+let savedInput = [];
 
 
+// draws 0 - 9 divs for the numbers on the calculator.
     for (i = 0; i <= 9; i++) {
         const div = document.createElement("div");
-        div.className = i;
+        div.className = "number";
+        div.classList.add(i);
         div.textContent = i;
-        divNumbers.appendChild(div);
+        divNumber.appendChild(div);
         if(i === 0) {
             div.className = "zero";
+            div.classList.add("0", "number");
         }
     }
     
+// Display Text function
+function displayText(input) {
+    const para = document.createElement("p");
+    para.className = "display-text";
+    para.textContent = input;
+    output.appendChild(para);
+    savedInput += input;
+}
+
+// eventlistener numbers
+const allNumbers = document.querySelectorAll(".number");
+allNumbers.forEach((number) => {
+    number.addEventListener("click", () => {
+        displayText(number.classList[1]);
+    })
+})
+
+// Event listener for operators
+const allOperators = document.querySelectorAll(".operator");
+allOperators.forEach((op) => {
+    op.addEventListener("click", () => {
+        // console.log(op.classList[1]); gets class name for easy insertion
+        // operate() calls operate function
+    })
+})
+
 
 
 // Variables
 let number = "";
-let operator = ["add", "sub", "mult", "div"];
+let operator = ["add", "sub", "mult", "div", "clear"];
 let number2 = "";
 
 // Math Functions
@@ -46,6 +75,13 @@ function divide(num1, num2) {
     return num1 / num2;
 }
 
+// Clear-button function
+function clear() {
+        output.textContent = "";
+        savedInput = [];
+}
+
+
 // Operate function
 
 function operate(num1, num2, operator) {
@@ -65,4 +101,4 @@ function operate(num1, num2, operator) {
             return divide(num1, num2);
     }
 } 
-operate(2,1);
+
