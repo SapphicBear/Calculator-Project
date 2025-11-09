@@ -5,6 +5,13 @@ const output = document.querySelector(".output");
 const divOperator = document.querySelector(".operators");
 const divNumber = document.querySelector(".numbers");
 let savedInput = [];
+let answer = "";
+let equals = false;
+
+// Variables
+let number = "";
+let number2 = "";
+let operator = "";
 
 
 // draws 0 - 9 divs for the numbers on the calculator.
@@ -28,12 +35,23 @@ function displayText(input) {
     output.appendChild(para);
     savedInput += input;
 }
+// Event listner for all buttons to change color when clicked
+
+
+
 
 // eventlistener numbers
 const allNumbers = document.querySelectorAll(".number");
 allNumbers.forEach((number) => {
     number.addEventListener("click", () => {
-        displayText(number.classList[1]);
+        if (equals === false) {
+        displayText(number.classList[1]);    
+        } else {
+            clearText();
+            equals = false;
+            displayText(number.classList[1]);  
+        }
+        
     })
 })
 
@@ -41,23 +59,60 @@ allNumbers.forEach((number) => {
 const allOperators = document.querySelectorAll(".operator");
 allOperators.forEach((op) => {
     op.addEventListener("click", () => {
-        // console.log(op.classList[1]); gets class name for easy insertion
+        // Checks if equals has been pressed.
+        if (equals === false) {
+            savedInput += ", ";
+        } else {
+            savedInput = answer + ", ";
+        }
+        output.textContent = "";
+        // gets class name for easy insertion
         // operate() calls operate function
+        const clickedOperator = op.classList[1];
+        switch (clickedOperator) {
+            case "clear":
+                clearText();
+                operator = "clear";
+                break;
+            case "add":
+                operator = "add";
+                equals = false;
+                break;
+            case "sub": 
+                operator = "sub";
+                equals = false;
+                break;
+            case "mult": 
+                operator = "mult";
+                equals = false;
+                break;
+            case "divide":
+                operator = "divide";
+                equals = false;
+                break;
+            case "equals":
+                output.textContent = "";
+                const split = savedInput.split(", ");
+                number = split[0];
+                number2 = split[1];
+                console.log(number, number2, operator);
+                answer = operate(number, number2, operator);
+                displayText(answer);
+                equals = true;
+                savedInput = [];
+        }
     })
 })
 
 
 
-// Variables
-let number = "";
-let operator = ["add", "sub", "mult", "div", "clear"];
-let number2 = "";
+
 
 // Math Functions
 
 // Add
 function addition(num1, num2) {
-    return num1 + num2;
+    return +num1 + +num2;
 }
 
 // Subtract
@@ -76,7 +131,7 @@ function divide(num1, num2) {
 }
 
 // Clear-button function
-function clear() {
+function clearText() {
         output.textContent = "";
         savedInput = [];
 }
@@ -87,8 +142,6 @@ function clear() {
 function operate(num1, num2, operator) {
     switch(operator) {
         case "add": 
-            operator = operator[0];
-            console.log((addition(num1, num2)));
             return addition(num1, num2);
             break;
         case "sub": 
@@ -97,7 +150,7 @@ function operate(num1, num2, operator) {
         case "mult": 
             return multiply(num1, num2);
             break;
-        case "div":
+        case "divide":
             return divide(num1, num2);
     }
 } 

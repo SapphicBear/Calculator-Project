@@ -70,6 +70,15 @@
     font-weight: 700;
     font-size:28px;
 }
+.operator:hover,
+.number:hover {
+    background-color:rgb(255, 195, 85);
+} 
+
+.operator:active,
+.number:active {
+    background-color:rgb(219, 94, 5);
+}
 .zero {
     order: 9;
 }
