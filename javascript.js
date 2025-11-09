@@ -4,9 +4,12 @@ const buttonArea = document.querySelector(".button-area");
 const output = document.querySelector(".output");
 const divOperator = document.querySelector(".operators");
 const divNumber = document.querySelector(".numbers");
-let savedInput = [];
+let savedInput = "";
+let firstOperator = "";
 let answer = "";
 let equals = false;
+let operatorClicked = false;
+
 
 // Variables
 let number = "";
@@ -34,8 +37,8 @@ function displayText(input) {
     para.textContent = input;
     output.appendChild(para);
     savedInput += input;
+    console.log(savedInput);
 }
-// Event listner for all buttons to change color when clicked
 
 
 
@@ -45,13 +48,13 @@ const allNumbers = document.querySelectorAll(".number");
 allNumbers.forEach((number) => {
     number.addEventListener("click", () => {
         if (equals === false) {
-        displayText(number.classList[1]);    
+        displayText(number.classList[1]);
         } else {
             clearText();
             equals = false;
             displayText(number.classList[1]);  
         }
-        
+        operatorClicked = false;
     })
 })
 
@@ -59,53 +62,113 @@ allNumbers.forEach((number) => {
 const allOperators = document.querySelectorAll(".operator");
 allOperators.forEach((op) => {
     op.addEventListener("click", () => {
-        // Checks if equals has been pressed.
-        if (equals === false) {
-            savedInput += ", ";
-        } else {
-            savedInput = answer + ", ";
-        }
-        output.textContent = "";
-        // gets class name for easy insertion
-        // operate() calls operate function
         const clickedOperator = op.classList[1];
+        if (number !== "") {
+            number2 = savedInput;
+            console.log(number2);
+        } else if (answer === ""){
+            number = savedInput;
+            firstOperator = clickedOperator;
+            console.log(firstOperator);
+            console.log(number);
+        }
+        else {
+            number = +answer;
+            console.log(answer);
+        }
+        // if (equals === false) {
+        //     number = savedInput;
+        // } else {
+        //     savedInput = answer;
+        // }
+        output.textContent = "";
+        savedInput = "";
+        if (operatorClicked === false) {
         switch (clickedOperator) {
-            case "clear":
-                clearText();
-                operator = "clear";
-                break;
             case "add":
+                operatorClicked = true;
                 operator = "add";
+                if (number !== "" && number2 !== "") {
+            answer = operate(number, number2, firstOperator);
+        } 
                 equals = false;
                 break;
-            case "sub": 
+            case "sub":
+                 
                 operator = "sub";
+                operatorClicked = true;
+                if (number !== "" && number2 !== "") {
+            answer = operate(number, number2, firstOperator);
+        } 
                 equals = false;
                 break;
             case "mult": 
+            operatorClicked = true;
                 operator = "mult";
+                if (number !== "" && number2 !== "") {
+            answer = operate(number, number2, firstOperator);
+        } 
+                console.log(clickedOperator);
+                
                 equals = false;
                 break;
             case "divide":
-                operator = "divide";
+                operatorClicked = true;
+                    operator = "divide";
+                
+                if (number !== "" && number2 !== "") {
+            answer = operate(number, number2, firstOperator);
+        } 
                 equals = false;
                 break;
+
             case "equals":
                 output.textContent = "";
-                const split = savedInput.split(", ");
-                number = split[0];
-                number2 = split[1];
+                 if (answer !== "") {
+                    number = answer;
+                }
                 console.log(number, number2, operator);
-                answer = operate(number, number2, operator);
-                displayText(answer);
+                answer = operate(+number, +number2, operator);
+                console.log(typeof answer);
+                if (typeof answer === "string") {
+                    displayText(answer);
+                }
+                else {
+                    displayText((parseFloat(answer).toFixed(2)));
+                }
                 equals = true;
-                savedInput = [];
+                savedInput = "";
+                number = "";
+                number2 = "";
         }
-    })
+    } else if (clickedOperator === "clear") {
+        clearText();
+    }
+        else {
+        const para = document.createElement("p");
+        para.textContent = "error";
+        output.appendChild(para);
+    }})
 })
 
-
-
+function check(num1, num2, num3) {
+    const para = document.createElement("p");
+        para.className = "error";
+        para.textContent = "Error!"
+    if (num1 === "" || num3 === "") {
+        if (num2 === "") {
+            output.appendChild(para);
+        console.log(number, number2, answer);}
+        }
+        
+    // } else if (num1 === "" && num3 === "") {
+    //     output.appendChild(para);
+    //     console.log(number, number2, answer);
+    // } 
+    else {
+        return;
+    }
+}
 
 
 // Math Functions
@@ -127,14 +190,22 @@ function multiply(num1, num2) {
 
 // Divide
 function divide(num1, num2) {
-    return num1 / num2;
+    if (num2 === 0 || isNaN(num2)) {
+        return "You cannot divide zero, idiot.";
+    } else {
+        return num1 / num2;
+    }
 }
 
 // Clear-button function
 function clearText() {
         output.textContent = "";
-        savedInput = [];
+        savedInput = "";
+        number = "";
+        number2 = "";
+        answer = "";
 }
+
 
 
 // Operate function
@@ -150,8 +221,9 @@ function operate(num1, num2, operator) {
         case "mult": 
             return multiply(num1, num2);
             break;
-        case "divide":
-            return divide(num1, num2);
+        case "divide": {
+        return divide(num1, num2);
+    }
     }
 } 
 
